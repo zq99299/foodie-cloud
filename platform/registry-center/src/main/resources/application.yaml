@@ -1,0 +1,23 @@
+## 本项目是 SpringCloud 中 第一个 启动的
+
+server:
+  port: 20000
+
+spring:
+  application:
+    name: eureka-server
+  profiles:
+    active: dev
+
+eureka:
+  instance:
+    # 需要检查的 hosts 文件是否有绑定 127.0.0.1       localhost
+    hostname: localhost
+  client:
+    # 当前的服务不注册到其他的 Eureka 上
+    # 因为我们是服务端，所以关闭客户端的这些功能
+    register-with-eureka: false
+    # 指示此客户端是否应从 eureka 服务器获取 eureka 注册表信息
+    # 因为我们是服务端，所以关闭客户端的这些功能
+    fetch-registry: false
+
