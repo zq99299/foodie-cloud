@@ -1,0 +1,10 @@
+### 查询商品详情
+GET http://localhost:10001/items/info/bingan-1001
+
+### 查询商品评级等级
+GET http://localhost:10001/items/commentLevel?itemId=bingan-1001
+
+
+# ============= service 接口测试
+### 根据商品 ID 查询详情
+GET http://localhost:10001/item-api/item?itemId=bingan-1001

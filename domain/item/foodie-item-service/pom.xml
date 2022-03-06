@@ -6,19 +6,24 @@
         <artifactId>foodie-cloud</artifactId>
         <groupId>cn.mrcode</groupId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>foodie-cloud-shared-pojo</artifactId>
-    <description>
-        公共的 POJO 类
-    </description>
+    <artifactId>foodie-item-service</artifactId>
+
     <dependencies>
+        <!-- 商品域的 api -->
         <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>5.3.0</version>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-item-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 商品域的 mapper -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-item-mapper</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

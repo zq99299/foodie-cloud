@@ -1,0 +1,18 @@
+# 在使用配置中心的时候，配置中心的这些属性就要写在 bootstrap.yml 中了
+# 另外配置中心也是注册到服务注册中心上的，所以注册中心也要放到这里
+
+###############
+# Eureka 注册中心
+##############
+eureka:
+  client:
+    # 服务注册中心地址
+    serviceUrl:
+      defaultZone: http://localhost:20000/eureka/
+
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: foode-item-service
+
