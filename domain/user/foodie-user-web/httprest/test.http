@@ -1,0 +1,20 @@
+### 用户注册
+POST http://localhost:10002/passport/regist
+Content-Type: application/json
+
+{
+  "username": "test100",
+  "password": "123456",
+  "confirmPassword": "123456"
+
+}
+
+### 用户登录
+POST http://localhost:10002/passport/login
+Content-Type: application/json
+
+{
+  "username": "test100",
+  "password": "123456"
+}
+
