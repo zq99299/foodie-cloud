@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>foodie-cloud</artifactId>
+        <groupId>cn.mrcode</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>foodie-order-service</artifactId>
+
+    <dependencies>
+        <!-- 订单中心的 api -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-order-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--  订单中心的 mapper -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-order-mapper</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!--  其他微服务的接口 -->
+        <!--  用户服务接口层 -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-user-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--  商品服务接口层 -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-item-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 要注册到服务中心
+         前面的改造都是讲 web 层才依赖这个，这里为什么要依赖？
+         是因为：前面说过需要调用其他服务的接口，所以这里就需要依赖下，才有调用相关的 jar 包
+         后续使用 feign 的时候，就可以替换为 feign 的 包和 API 来发起请求
+         -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>foodie-cloud</artifactId>
+        <groupId>cn.mrcode</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>foodie-order-api</artifactId>
+
+    <dependencies>
+        <!-- 公共的 pojo -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-cloud-shared-pojo</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 订单中心的 pojo -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-order-pojo</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!--
+         这个依赖主要是为了将 controller 的一些声明放到接口层，
+         为了后续的服务间的调用做准备
+         -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- TODO Feign 依赖，后续讲到这个的时候再弄进来 -->
+    </dependencies>
+
+</project>

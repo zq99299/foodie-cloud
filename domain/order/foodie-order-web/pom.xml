@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>foodie-cloud</artifactId>
+        <groupId>cn.mrcode</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../../../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>foodie-order-web</artifactId>
+
+
+    <dependencies>
+        <!-- 订单中心 service -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-order-service</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 公共组件 -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>foodie-cloud-web-components</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 要注册到服务中心 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <!--
+         SpringCloud 2.4版本 之后不再 优先读取 bootstrap 文件，导致 bootstrap 不起作用
+         -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-bootstrap</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!-- 可以已命令行方式直接启动 -->
+    <build>
+        <plugins>
+            <plugin>
+                <!-- 命令行启动配置  -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <!-- 启动类 -->
+                    <mainClass>cn.mrcode.user.web.UserApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- 从新打包，将清单中的启动类替换到上面配置的 mainClass -->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
