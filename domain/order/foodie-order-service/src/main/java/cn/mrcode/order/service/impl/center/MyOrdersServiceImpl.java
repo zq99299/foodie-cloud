@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
+@RequestMapping("my-order-api")
 public class MyOrdersServiceImpl extends BaseService implements MyOrdersService {
 
     @Autowired

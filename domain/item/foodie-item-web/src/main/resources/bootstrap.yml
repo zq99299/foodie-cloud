@@ -11,8 +11,6 @@ eureka:
       defaultZone: http://localhost:20000/eureka/
 
 spring:
-  main:
-    allow-circular-references: true
   application:
-    name: foode-item-service
+    name: foodie-item-service
 

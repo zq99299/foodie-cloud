@@ -27,17 +27,10 @@
             <version>${project.version}</version>
         </dependency>
         <!-- 要注册到服务中心 -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-        </dependency>
-        <!--
-         SpringCloud 2.4版本 之后不再 优先读取 bootstrap 文件，导致 bootstrap 不起作用
-         -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-bootstrap</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.cloud</groupId>-->
+<!--            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>-->
+<!--        </dependency>-->
     </dependencies>
 
     <!-- 可以已命令行方式直接启动 -->
@@ -49,7 +42,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 启动类 -->
-                    <mainClass>cn.mrcode.user.web.UserApplication</mainClass>
+                    <mainClass>cn.mrcode.order.web.OrderApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

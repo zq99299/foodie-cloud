@@ -17,8 +17,6 @@ server:
 spring:
   main:
     allow-circular-references: true
-  application:
-    name: foode-item-service
   profiles:
     active: dev
   datasource:

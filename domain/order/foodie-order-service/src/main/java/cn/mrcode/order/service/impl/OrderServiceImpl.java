@@ -4,6 +4,7 @@ import cn.mrcode.enums.OrderStatusEnum;
 import cn.mrcode.enums.YesOrNo;
 import cn.mrcode.item.pojo.Items;
 import cn.mrcode.item.pojo.ItemsSpec;
+import cn.mrcode.item.service.ItemService;
 import cn.mrcode.order.api.OrderService;
 import cn.mrcode.order.mapper.OrderItemsMapper;
 import cn.mrcode.order.mapper.OrderStatusMapper;
@@ -16,16 +17,15 @@ import cn.mrcode.order.pojo.bo.ShopcartBO;
 import cn.mrcode.order.pojo.bo.SubmitOrderBO;
 import cn.mrcode.order.pojo.vo.MerchantOrdersVO;
 import cn.mrcode.order.pojo.vo.OrderVO;
+import cn.mrcode.user.api.AddressService;
 import cn.mrcode.user.pojo.UserAddress;
 import cn.mrcode.utils.DateUtil;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -37,20 +37,17 @@ import java.util.List;
  */
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Service
+@RequestMapping("order-api")
 public class OrderServiceImpl implements OrderService {
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired
     private OrdersMapper ordersMapper;
     @Autowired
     private Sid sid;
-    // todo : 后续学习到 feign 再来使用 service 的方式
-//    @Autowired
-//    private AddressService addressService;
-//    @Autowired
-//    private ItemService itemService;
     @Autowired
-    private LoadBalancerClient loadBalancerClient;
-    private RestTemplate restTemplate = new RestTemplate();
+    private AddressService addressService;
+    @Autowired
+    private ItemService itemService;
 
     @Autowired
     private OrderItemsMapper orderItemsMapper;
@@ -72,13 +69,7 @@ public class OrderServiceImpl implements OrderService {
         // 使用 sid 生成
         String orderId = sid.nextShort();
 
-        // UserAddress address = addressService.queryUserAddres(userId, addressId);
-        ServiceInstance instance = loadBalancerClient.choose("FOODIE-USER-SERVICE");
-        String target = String.format("http://%s:%s/address-api/queryUserAddress" +
-                        "?userId=%s&addressId=%s",
-                instance.getHost(), instance.getPort(),
-                userId, addressId);
-        UserAddress address = restTemplate.getForObject(target, UserAddress.class);
+        UserAddress address = addressService.queryUserAddres(userId, addressId);
 
 
         // 1. 新订单数据保存
@@ -119,7 +110,6 @@ public class OrderServiceImpl implements OrderService {
         List<ShopcartBO> toBeRemovedShopcatdList = new ArrayList<>();
         List<ShopcartBO> shopcartBOList = placeOrder.getItems();
 
-        ServiceInstance itemInstance = loadBalancerClient.choose("FOODIE-ITEM-SERVICE");
         for (String itemSpecId : itemSpecIdArr) {
 
             // 整合 redis 后，商品购买的数量重新从 redis 的购物车中获取
@@ -133,13 +123,7 @@ public class OrderServiceImpl implements OrderService {
             int buyCounts = shopcartBO.getBuyCounts();
 
             // 2.1 根据规格 id，查询规格的具体信息，主要获取价格
-            //ItemsSpec itemSpec = itemService.queryItemSpecById(itemSpecId);
-
-            String itemSpecTarget = String.format("http://%s:%s/item-api/itemSpac" +
-                            "?specId=%s",
-                    itemInstance.getHost(), itemInstance.getPort(),
-                    itemSpecId);
-            ItemsSpec itemSpec = restTemplate.getForObject(itemSpecTarget, ItemsSpec.class);
+            ItemsSpec itemSpec = itemService.queryItemSpecById(itemSpecId);
 
             totalAmount += itemSpec.getPriceNormal() * buyCounts;
             realPayAmount += itemSpec.getPriceDiscount() * buyCounts;
@@ -147,19 +131,10 @@ public class OrderServiceImpl implements OrderService {
             // 2.2 根据商品 id，获得商品信息以及商品主图
             String itemId = itemSpec.getItemId();
 
-            // Items item = itemService.queryItemById(itemId);
-            String itemTarget = String.format("http://%s:%s/item-api/item" +
-                            "?itemId=%s",
-                    itemInstance.getHost(), itemInstance.getPort(),
-                    itemId);
-            Items item = restTemplate.getForObject(itemTarget, Items.class);
+            Items item = itemService.queryItemById(itemId);
 
-            // String imgUrl = itemService.queryItemMainImgById(itemId);
-            String imgUrlTarget = String.format("http://%s:%s/item-api/primaryImage" +
-                            "?itemId=%s",
-                    itemInstance.getHost(), itemInstance.getPort(),
-                    itemId);
-            String imgUrl = restTemplate.getForObject(imgUrlTarget, String.class);
+            String imgUrl = itemService.queryItemMainImgById(itemId);
+
 
             // 2.3 循环保存子订单数据到数据库
             String subOrderId = sid.nextShort();
@@ -176,12 +151,7 @@ public class OrderServiceImpl implements OrderService {
             orderItemsMapper.insert(subOrderItem);
 
             // 2.4 在用户提交订单以后，规格表中需要扣除库存
-            //itemService.decreaseItemSpecStock(itemSpecId, buyCounts);
-            String decreaseSpecStockTarget = String.format("http://%s:%s/item-api/decreaseSpecStock" +
-                            "?specId=%s,buyCounts=%s",
-                    itemInstance.getHost(), itemInstance.getPort(),
-                    itemSpecId, buyCounts);
-            restTemplate.postForLocation(decreaseSpecStockTarget, null);
+            itemService.decreaseItemSpecStock(itemSpecId, buyCounts);
         }
 
         newOrder.setTotalAmount(totalAmount);

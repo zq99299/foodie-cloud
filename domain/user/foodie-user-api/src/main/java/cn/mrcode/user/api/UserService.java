@@ -2,9 +2,11 @@ package cn.mrcode.user.api;
 
 import cn.mrcode.user.pojo.Users;
 import cn.mrcode.user.pojo.bo.UserBO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("user-api")
+//@RequestMapping("user-api")
+@FeignClient(value = "foode-user-service", path = "user-api")
 public interface UserService {
     /**
      * 查找用户名是否存在

@@ -1,0 +1,12 @@
+### 保存评论列表
+
+POST http://localhost:10003/mycomments/saveList?userId=1908189H7TNWDTXP&orderId=190827F2R9A6ZT2W
+Content-Type: application/json
+
+[
+  {
+    "itemId": 12,
+    "content": "sdf",
+    "commentLevel": 2
+  }
+]

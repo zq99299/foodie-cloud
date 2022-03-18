@@ -14,5 +14,5 @@ spring:
   main:
     allow-circular-references: true
   application:
-    name: foode-order-service
+    name: foodie-order-service
 

@@ -3,11 +3,13 @@ package cn.mrcode.user.api;
 
 import cn.mrcode.user.pojo.UserAddress;
 import cn.mrcode.user.pojo.bo.AddressBO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("address-api")
+@FeignClient(value = "foode-user-service",path = "address-api")
+//@RequestMapping("address-api")
 public interface AddressService {
 
     /**

@@ -2,6 +2,7 @@ package cn.mrcode.order.web.controller.center;
 
 import cn.mrcode.controller.BaseController;
 import cn.mrcode.enums.YesOrNo;
+import cn.mrcode.item.service.ItemCommentsService;
 import cn.mrcode.order.api.center.MyCommentsService;
 import cn.mrcode.order.api.center.MyOrdersService;
 import cn.mrcode.order.pojo.OrderItems;
@@ -9,11 +10,13 @@ import cn.mrcode.order.pojo.Orders;
 import cn.mrcode.order.pojo.bo.center.OrderItemsCommentBO;
 import cn.mrcode.pojo.JSONResult;
 import cn.mrcode.pojo.PagedGridResult;
+import com.netflix.loadbalancer.ILoadBalancer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +31,10 @@ public class MyCommentsController extends BaseController {
     private MyCommentsService myCommentsService;
     @Autowired
     private MyOrdersService myOrdersService;
+    @Autowired
+    private ItemCommentsService itemCommentsService;
+    @Autowired
+    private LoadBalancerClient loadBalancerClient;
 
     @ApiOperation(value = "查询订单列表", notes = "查询订单列表", httpMethod = "POST")
     @PostMapping("/pending")
@@ -99,11 +106,9 @@ public class MyCommentsController extends BaseController {
             pageSize = COMMON_PAGE_SIZE;
         }
 
-        // todo 从商品中心获取
-//        PagedGridResult grid = myCommentsService.queryMyComments(userId,
-//                page,
-//                pageSize);
-        PagedGridResult grid = null;
+        PagedGridResult grid = itemCommentsService.queryMyComments(userId,
+                page,
+                pageSize);
         return JSONResult.ok(grid);
     }
 

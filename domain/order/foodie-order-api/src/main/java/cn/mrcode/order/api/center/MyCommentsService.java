@@ -3,11 +3,14 @@ package cn.mrcode.order.api.center;
 
 import cn.mrcode.order.pojo.OrderItems;
 import cn.mrcode.order.pojo.bo.center.OrderItemsCommentBO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequestMapping("order-comments-api")
+//@RequestMapping("order-comments-api")
+//@FeignClient(value = "foodie-order-service", path = "order-comments-api")
+@FeignClient(value = "FOODIE_ORDER_SERVICE", path = "order-comments-api")
 public interface MyCommentsService {
 
     /**

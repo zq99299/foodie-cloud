@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tk.mybatis.mapper.entity.Example;
 
@@ -30,7 +31,7 @@ import java.util.*;
 // 由于这里要暴露给服务之间的调用，所以要声明称 controller
 @RestController
 @Slf4j
-//@Service
+@RequestMapping("item-api")
 public class ItemServiceImpl implements ItemService {
     @Autowired
     private ItemsMapper itemsMapper;

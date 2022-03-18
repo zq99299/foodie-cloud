@@ -4,13 +4,15 @@ package cn.mrcode.order.api;
 import cn.mrcode.order.pojo.OrderStatus;
 import cn.mrcode.order.pojo.bo.PlaceOrder;
 import cn.mrcode.order.pojo.vo.OrderVO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author mrcode
  * @date 2021/2/16 20:10
  */
-@RequestMapping("order-api")
+//@RequestMapping("order-api")
+@FeignClient(value = "foodie-order-service", path = "order-api")
 public interface OrderService {
     /**
      * 用于创建订单相关信息

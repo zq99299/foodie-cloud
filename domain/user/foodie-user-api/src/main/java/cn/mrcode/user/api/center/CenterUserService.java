@@ -2,13 +2,15 @@ package cn.mrcode.user.api.center;
 
 import cn.mrcode.user.pojo.Users;
 import cn.mrcode.user.pojo.bo.center.CenterUserBO;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * @author mrcode
  * @date 2021/2/18 20:59
  */
-@RequestMapping("center-user-api")
+@FeignClient(value = "foode-user-service",path = "center-user-api")
+//@RequestMapping("center-user-api")
 public interface CenterUserService {
     /**
      * 根据用户 id 查询用户信息
