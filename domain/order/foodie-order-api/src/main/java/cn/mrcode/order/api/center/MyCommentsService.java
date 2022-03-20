@@ -10,7 +10,7 @@ import java.util.List;
 
 //@RequestMapping("order-comments-api")
 //@FeignClient(value = "foodie-order-service", path = "order-comments-api")
-@FeignClient(value = "FOODIE_ORDER_SERVICE", path = "order-comments-api")
+@FeignClient(value = "foodie-order-service", path = "order-comments-api")
 public interface MyCommentsService {
 
     /**
