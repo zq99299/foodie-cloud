@@ -28,6 +28,8 @@
         <module>domain/order/foodie-order-pojo</module>
         <module>domain/order/foodie-order-service</module>
         <module>domain/order/foodie-order-web</module>
+        <module>platform/hystrix-turbine</module>
+        <module>platform/hystrix-dashboard</module>
     </modules>
 
     <!-- 管理依赖的 JAR 版本-->

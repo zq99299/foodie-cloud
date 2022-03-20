@@ -4,6 +4,7 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -23,6 +24,7 @@ import tk.mybatis.spring.annotation.MapperScan;
         "cn.mrcode.user.api",
         "cn.mrcode.item.service",  // 这里是 item.api 的包，写项目的时候，定义错了，所以这里是 service
 })
+@EnableHystrix
 public class OrderApplication {
     public static void main(String[] args) {
         new SpringApplicationBuilder(OrderApplication.class)

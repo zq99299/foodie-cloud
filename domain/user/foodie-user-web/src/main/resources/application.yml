@@ -59,3 +59,17 @@ mapper:
 pagehelper:
   helperDialect: mysql
   supportMethodsArguments: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # 暴露接口
+        # include: "*"  # 可以采用这种方式暴露所有的端口
+        include:
+          # actuator 会暴露 /actuator/hystrix.stream 端口
+          # 通过这个地址可以获取到 Hystrix 指标流
+          - hystrix.stream
+  endpoint:
+    health:
+      show-details: always

@@ -1,0 +1,18 @@
+server:
+  port: 20001
+
+turbine:
+  # 指定要监控的服务名,多个服务使用逗号分隔
+  # app-config: foodie-order-service,foodie-item-service,foodie-user-service
+  app-config: foodie-order-service
+  # 这里只有一个集群,使用默认的集群名称；匹配的是 注册中心里面每个服务自己配置的元数据里面的信息
+  # 比如说有一个服务配置了： eureka.instance.metadata-map= myClusterName=abc
+  # 这里就可以写 metadata['myClusterName']
+  cluster-name-expression: "'default'"
+  # 默认情况下与 host 来区分服务的，这里设置使用 host 和 端口号来识别
+  combine-host-port: true
+  aggregator:
+    # 聚合的集群配置，这里只有一个
+    cluster-config: default
+    # 如果有多个集群
+    # cluster-config: cluster1,cluster2
