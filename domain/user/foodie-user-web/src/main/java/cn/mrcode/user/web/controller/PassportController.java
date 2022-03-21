@@ -11,6 +11,8 @@ import cn.mrcode.utils.CookieUtils;
 import cn.mrcode.utils.JsonUtils;
 import cn.mrcode.utils.MD5Utils;
 import cn.mrcode.utils.RedisOperator;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -102,6 +104,49 @@ public class PassportController extends BaseController {
 
     @ApiOperation(value = "用户登录")
     @PostMapping("/login")
+    @HystrixCommand(
+            // 全局唯一的标识服务，默认是方法签名
+            commandKey = "loginFail",
+            // 全局服务分组，用于组织仪表盘，统计信息分组
+            // 如果不指定的话，会默认指定一个值，以类名作为默认值
+            groupKey = "password",
+            // 指向当前类的 loginFail 方法，签名需要是 public 或则 private
+            fallbackMethod = "loginFail",
+            // 在列表中声明的异常类型不会触发降级
+            ignoreExceptions = {IllegalArgumentException.class},
+            // 线程有关属性配置
+            // 线程组：多个服务可以共用一个线程组
+            threadPoolKey = "threadPoolA",
+            threadPoolProperties = {
+                    // 有很多属性可配置，配置线程池属性，具体有哪些可以参考 Hystrix 的官方文档
+                    // 这里挑几个有代表性的
+                    // 核心线程数量
+                    @HystrixProperty(name = "coreSize", value = "20"),
+                    /*
+                      队列最大值
+                      size > 0: 使用 LinkedBlockingQueue 来实现请求等待队列
+                      默认 -1：SynchronousQueue 阻塞队列，不存储元素；简单说就是一个生产者消费者的例子，但是只有一个位置，给一个，就必须有一个消费完成后，才会有下一个位置
+                        对于这种 JUC 的功能，最好还是自己去 debug 源码
+                     */
+                    @HystrixProperty(name = "maxQueueSize", value = "40"),
+                    /*
+                      队列大小拒绝阈值：在队列没有达到 maxQueueSize 值时，但是达到了这里的阀值则拒绝
+                      在 maxQueueSize = -1 时无效
+                     */
+                    @HystrixProperty(name = "queueSizeRejectionThreshold", value = "15"),
+                    // 统计相关属性
+                    // （线程池）统计窗口持续时间
+                    @HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "1024"),
+                    // （线程池）窗口内桶的数量
+                    // 这两个加起来的含义就是：在持续时间内，均分多少个桶，这个是什么含义笔者有点忘记了，和有一个好像叫时间窗口的实现算法有关系
+                    // 大概好像是：比如 10 分钟，10 个桶，那么随着时间的推移，到了 11 分钟，那么第 1 个桶就被丢弃，然后成为了第 10 个桶
+                    // 在这 1 分钟内的数据都被存储在这个桶里面；总共就 10 个桶来回倒腾
+                    @HystrixProperty(name = "metrics.rollingStats.numBuckets", value = "18")
+            },
+            commandProperties = {
+                    // 熔断降级相关属性也可以放到这里
+            }
+    )
     public JSONResult login(@RequestBody UserBO userBO,
                             HttpServletRequest request,
                             HttpServletResponse response) throws Exception {
@@ -129,6 +174,22 @@ public class PassportController extends BaseController {
         // 同步购物车数据
         synchShopcartData(user.getId(), request, response);
         return JSONResult.ok(user);
+    }
+
+    /**
+     * 降级方法，原始方法有什么参数就必须有什么参数，但是可以多一个 Throwable 参数
+     * @param userBO
+     * @param request
+     * @param response
+     * @param throwable
+     * @return
+     * @throws Exception 当异常降级的时候，就会把那个异常注入给你
+     */
+    private JSONResult loginFail(@RequestBody UserBO userBO,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 Throwable throwable) throws Exception {
+        return JSONResult.errorMsg("验证码输错了（模仿 12306）");
     }
 
     private void synchShopcartData(String userId,
