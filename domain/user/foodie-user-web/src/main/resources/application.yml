@@ -73,3 +73,62 @@ management:
   endpoint:
     health:
       show-details: always
+
+hystrix:
+  command:
+    # 全局默认配置
+    default:
+      fallback:
+        # 是否开启服务降级
+        enabled: true
+      circuitBreaker:
+        # === 下面的参数不是特别重要的，是一些开关参数
+        # 开启熔断器，默认也是开启
+        enabled: true
+        # 强制开启熔断器
+        forceOpen: false
+        # 强制关闭熔断器
+        forceClosed: false
+
+        # === 影响到熔断器判定之类的重要参数
+        # 熔断的前提条件(请求数量)，在一定的时间窗口内，请求达到 n 个以后，才会进入熔断判断
+        requestVolumeThreshold: 5
+        # 超过百分之 50 的失败请求，则熔断开关开启
+        # 真实业务中会设置的低一点，比如 35%
+        errorThresholdPercentage: 50
+        # 在 n 毫秒后，将熔断器状态变成 半开状态，一般会小于时间窗口
+        sleepWindowInMilliseconds: 15000
+      # 执行
+      execution:
+        # 执行超时开启
+        timeout:
+          enabled: true
+        # 隔离
+        isolation:
+          # 线程
+          thread:
+            # 超时毫秒
+            timeoutInMilliseconds: 10000
+            # 超时以后终止线程
+            interrupOnTimeout: true
+            # 此属性指示 HystrixCommand.run() 发生取消时是否应中断执行。
+            interruptOnCancel: true
+      # === 影响到熔断器判定之类的重要参数
+      # metrics 就是统计指标
+      metrics:
+        rollingStats:
+          # 以  20 秒作为一个时间统计窗口
+          timeInMilliseconds: 20000
+          # 滑动窗口个数，最好被上面的时间窗口整除
+          # numBuckets: 10
+        # 百分位计数
+        rollingPercentile:
+          timeInMilliseconds: 20000
+          bucketSize: 300
+    # 针对某个业务配置
+    loginFail:
+      execution:
+        isolation:
+          thread:
+            # 覆盖默认配置中的超时时间为 3000 毫秒
+            timeoutInMilliseconds: 3000

@@ -11,8 +11,8 @@ eureka:
       defaultZone: http://localhost:20000/eureka/
 
 spring:
-  main:
-    allow-circular-references: true
+#  main:
+#    allow-bean-definition-overriding: true
   application:
     name: foodie-order-service
 

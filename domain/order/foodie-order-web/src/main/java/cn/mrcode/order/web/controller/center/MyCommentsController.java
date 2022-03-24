@@ -8,6 +8,7 @@ import cn.mrcode.order.api.center.MyOrdersService;
 import cn.mrcode.order.pojo.OrderItems;
 import cn.mrcode.order.pojo.Orders;
 import cn.mrcode.order.pojo.bo.center.OrderItemsCommentBO;
+import cn.mrcode.order.service.impl.fallback.itemservice.ItemCommentsFeignClient;
 import cn.mrcode.pojo.JSONResult;
 import cn.mrcode.pojo.PagedGridResult;
 import com.netflix.loadbalancer.ILoadBalancer;
@@ -32,7 +33,8 @@ public class MyCommentsController extends BaseController {
     @Autowired
     private MyOrdersService myOrdersService;
     @Autowired
-    private ItemCommentsService itemCommentsService;
+    // private ItemCommentsService itemCommentsService;
+    private ItemCommentsFeignClient itemCommentsService;
     @Autowired
     private LoadBalancerClient loadBalancerClient;
 

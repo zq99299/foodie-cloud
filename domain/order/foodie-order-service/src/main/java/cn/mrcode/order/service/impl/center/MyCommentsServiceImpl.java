@@ -10,6 +10,7 @@ import cn.mrcode.order.pojo.OrderItems;
 import cn.mrcode.order.pojo.OrderStatus;
 import cn.mrcode.order.pojo.Orders;
 import cn.mrcode.order.pojo.bo.center.OrderItemsCommentBO;
+import cn.mrcode.order.service.impl.fallback.itemservice.ItemCommentsFeignClient;
 import cn.mrcode.service.BaseService;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,8 @@ public class MyCommentsServiceImpl extends BaseService implements MyCommentsServ
 
     // 注入 FeignClient
     @Autowired
-    private ItemCommentsService itemCommentsService;
+//    private ItemCommentsService itemCommentsService;
+    private ItemCommentsFeignClient itemCommentsService;
 
     // 这里使用 eureka 的方式先进行调用
     // 后续学到 feign 的时候再缓存对方暴露出来的 service 方式

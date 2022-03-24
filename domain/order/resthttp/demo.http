@@ -10,3 +10,6 @@ Content-Type: application/json
     "commentLevel": 2
   }
 ]
+### 查询我的订单评价
+POST http://localhost:10003/mycomments/query?userId=1908189H7TNWDTXP&page=1&pageSize=5
+Content-Type: application/json

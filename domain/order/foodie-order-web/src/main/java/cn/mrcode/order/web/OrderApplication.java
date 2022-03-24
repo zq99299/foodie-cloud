@@ -1,5 +1,6 @@
 package cn.mrcode.order.web;
 
+import cn.mrcode.order.service.impl.fallback.itemservice.ItemCommentsFeignClient;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -20,10 +21,13 @@ import tk.mybatis.spring.annotation.MapperScan;
 @ComponentScan(basePackages = {"cn.mrcode.order", "org.n3r.idworker", "cn.mrcode.utils"})
 // TDO 后面再加上 feign
 @EnableScheduling
-@EnableFeignClients(basePackages = {
-        "cn.mrcode.user.api",
-        "cn.mrcode.item.service",  // 这里是 item.api 的包，写项目的时候，定义错了，所以这里是 service
-})
+@EnableFeignClients(
+        basePackages = {
+                "cn.mrcode.user.api",
+                "cn.mrcode.item.service",  // 这里是 item.api 的包，写项目的时候，定义错了，所以这里是 service
+                "cn.mrcode.order.service.impl.fallback.itemservice"
+        }
+)
 @EnableHystrix
 public class OrderApplication {
     public static void main(String[] args) {
