@@ -15,4 +15,16 @@ spring:
     allow-circular-references: true
   application:
     name: foodie-user-service
+  cloud:
+    config:
+      discovery:
+        # 打开服务发现功能
+        enabled: true
+        service-id: config-server
+      # 应用名称
+      name: ${spring.application.name}
+      # 环境
+      profile: dev
+      # 分支
+      label: foodie
 

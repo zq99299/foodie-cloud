@@ -18,3 +18,8 @@ Content-Type: application/json
   "password": "123456"
 }
 
+### actuator 测试
+GET http://localhost:10002/actuator
+
+### actuator 测试
+GET http://localhost:10002/actuator/env

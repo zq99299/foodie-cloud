@@ -1,0 +1,9 @@
+### 加密
+POST http://localhost:20003/encrypt
+
+root
+
+### 解密
+POST http://localhost:20003/decrypt
+
+a51c4675af4ec72a54918a00ca67485d7d0ef1774159d1c50380fa5009f3a10a

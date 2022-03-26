@@ -7,6 +7,7 @@ import cn.mrcode.user.pojo.Users;
 import cn.mrcode.user.pojo.bo.ShopcartBO;
 import cn.mrcode.user.pojo.bo.UserBO;
 import cn.mrcode.user.pojo.vo.UsersVO;
+import cn.mrcode.user.web.UserApplicationProperties;
 import cn.mrcode.utils.CookieUtils;
 import cn.mrcode.utils.JsonUtils;
 import cn.mrcode.utils.MD5Utils;
@@ -17,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,7 @@ import java.util.List;
 @Api(value = "注册登录", tags = {"用户注册登录的相关接口"}) // API 分组
 @RestController
 @RequestMapping("/passport")
+@Slf4j
 public class PassportController extends BaseController {
     @Autowired
     private UserService userService;
@@ -36,6 +39,8 @@ public class PassportController extends BaseController {
     private RedisOperator redisOperator;
     @Autowired
     private BaseUserController baseUserController;
+    @Autowired
+    private UserApplicationProperties userApplicationProperties;
 
     @ApiOperation(value = "用户名是否存在", notes = "判断用户名是否存在", httpMethod = "GET")
     @GetMapping("/usernameIsExist")
@@ -57,11 +62,16 @@ public class PassportController extends BaseController {
         return JSONResult.ok();
     }
 
+
     @ApiOperation(value = "用户注册", notes = "用户用户注册", httpMethod = "POST")
     @PostMapping("/regist")
     public JSONResult regist(@RequestBody UserBO userBO,
                              HttpServletRequest request,
                              HttpServletResponse response) {
+        if (userApplicationProperties.isDisabledRegistration()) {
+            log.info("{} 该用户被系统拦截注册", userBO.getUsername());
+            return JSONResult.errorMsg("当前注册用户过多，请稍后再试");
+        }
         String username = userBO.getUsername();
         String password = userBO.getPassword();
         String confirmPassword = userBO.getConfirmPassword();
@@ -178,6 +188,7 @@ public class PassportController extends BaseController {
 
     /**
      * 降级方法，原始方法有什么参数就必须有什么参数，但是可以多一个 Throwable 参数
+     *
      * @param userBO
      * @param request
      * @param response

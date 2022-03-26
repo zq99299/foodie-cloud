@@ -5,9 +5,11 @@ spring:
   datasource:
     # 拆分数据源到独立 database instance，或则独立 schema
     ## url: jdbc:mysql://localhost:3306/foodie-shop-dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
-    url: jdbc:mysql://localhost:3306/foodie-shop-dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    # url: jdbc:mysql://localhost:3306/foodie-shop-dev?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    url: ${mariadb.url}
     username: root
-    password: root
+    # password: root
+    password: ${mariadb.password}
   redis:
     # 单机但实例
     database: 1

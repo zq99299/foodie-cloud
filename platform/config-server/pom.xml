@@ -6,26 +6,19 @@
         <artifactId>foodie-cloud</artifactId>
         <groupId>cn.mrcode</groupId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../../pom.xml</relativePath>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>foodie-user-web</artifactId>
+    <artifactId>config-server</artifactId>
 
+    <packaging>jar</packaging>
     <dependencies>
-        <!-- 用户层 service -->
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>foodie-user-service</artifactId>
-            <version>${project.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-config-server</artifactId>
         </dependency>
-        <!-- 公共组件 -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>foodie-cloud-web-components</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <!-- 要注册到服务中心 -->
+        <!--  eureka-client -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -34,15 +27,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
-        <!-- config-client -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-config</artifactId>
-        </dependency>
     </dependencies>
-
-    <!-- 可以已命令行方式直接启动 -->
     <build>
         <plugins>
             <plugin>
@@ -51,7 +36,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 启动类 -->
-                    <mainClass>cn.mrcode.user.web.UserApplication</mainClass>
+                    <mainClass>cn.mrcode.ConfigServerApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
@@ -64,5 +49,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

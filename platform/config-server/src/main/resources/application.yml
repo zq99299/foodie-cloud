@@ -1,0 +1,26 @@
+server:
+  port: 20003
+
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        # 属性重载，将远程的配置文件中的同名属性使用这里的覆盖掉
+        overrides:
+          test: mytest
+        git:
+          uri: https://github.com/zq99299/spring-cloud-demo-config.git
+          force-pull: true
+          skip-ssl-validation: true
+          ## 不放在所有根目录，给每个应用都创建一个目录来存放
+          # 占位符支持 3 个变量 {application} {profile} {label}
+          search-paths: '{application}'
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # 暴露接口
+        include: "*"
