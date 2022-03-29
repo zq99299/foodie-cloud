@@ -1,0 +1,11 @@
+### 获取路由信息
+GET http://localhost:20004/actuator/gateway/routes
+
+### 用户登录
+POST http://localhost:20004/passport/login
+Content-Type: application/json
+
+{
+  "username": "test100",
+  "password": "123456"
+}

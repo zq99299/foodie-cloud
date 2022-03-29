@@ -31,6 +31,7 @@
         <module>platform/hystrix-turbine</module>
         <module>platform/hystrix-dashboard</module>
         <module>platform/config-server</module>
+        <module>platform/gateway</module>
     </modules>
 
     <!-- 管理依赖的 JAR 版本-->
@@ -49,7 +50,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-parent</artifactId>
-                <version>2.1.4.RELEASE</version>
+                <version>2.1.18.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
