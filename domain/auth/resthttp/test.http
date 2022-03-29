@@ -1,0 +1,14 @@
+### token 发放
+POST http://localhost:10005/token
+Content-Type: application/x-www-form-urlencoded
+
+userId=mrcode
+
+### token 验证
+POST http://localhost:10005/verify
+Content-Type: application/json
+
+{
+  "token":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtcmNvZGUiLCJleHAiOjE2NDg1NjQ1NzgsImlhdCI6MTY0ODU2Mzk3OCwidXNlcm5hbWUiOiJtcmNvZGUifQ.sfYuaM33zQ9YLmZhe7WVbvjigG2WlAmsY-iufnKvn90",
+  "userId": "mrcode"
+}
