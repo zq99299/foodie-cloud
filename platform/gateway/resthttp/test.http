@@ -9,3 +9,6 @@ Content-Type: application/json
   "username": "test100",
   "password": "123456"
 }
+
+### 用户地址获取
+POST http://localhost:20004/address/list?userId=220306FA5FHXMA80
