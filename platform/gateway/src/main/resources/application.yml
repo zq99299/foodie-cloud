@@ -7,6 +7,23 @@ spring:
   cloud:
     # gateway 配置
     gateway:
+      globalcors:
+        cors-configurations:
+          # 针对所有地址配置跨域
+          '[/**]':
+            # 设置运行跨域的地址，也可以使用 * 代替允许所有地址
+            allowedOrigins:
+              - "http://localhost:8080"
+              - "*"
+            # 是否运行携带 cookie 相关信息
+            allowCredentials: true
+            # 允许访问所有的 http 请求方式，如 get、post
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            # 可以暴露给前端用户的 headers
+            exposedHeaders: "*"
+            # Options 可以在浏览器缓存多少时间
+            maxAge: 600
       discovery:
         # 定位器: 自动创建路由规则
         locator:
