@@ -32,9 +32,18 @@ public class RoutesConfiguration {
      */
     @Bean
     @Order
-    public RouteLocator routeLocator(RouteLocatorBuilder builder) {
+    public RouteLocator routeLocator(RouteLocatorBuilder builder,AuthFilter authFilter) {
         return builder
                 .routes()
+                // 配置那些地址需要通过登录校验的
+                // 这里使用了一种最直观，但是感觉重复代码很麻烦的方式来配置
+                .route(p -> p.path("/address/**")
+                        .filters(f -> f.filter(authFilter))
+                        .uri("lb://FOODIE-USER-SERVICE")
+                 )
+                .route(p -> p.path("/refresh")
+                        .uri("lb://FOODIE-AUTH-SERVICE")
+                )
                 .route(p -> p.path("/address/**", "/passport/**", "/center/**", "/userInfo/**")
                         .filters(f -> f.requestRateLimiter(config -> {
                             config.setKeyResolver(remoteAddrKeyResolver);

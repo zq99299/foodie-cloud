@@ -1,5 +1,9 @@
 package cn.mrcode.user.web.controller;
 
+import cn.mrcode.auth.service.AuthService;
+import cn.mrcode.auth.service.pojo.Account;
+import cn.mrcode.auth.service.pojo.AuthResponse;
+import cn.mrcode.auth.service.pojo.AuthResponseCode;
 import cn.mrcode.controller.BaseController;
 import cn.mrcode.pojo.JSONResult;
 import cn.mrcode.user.api.UserService;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Api(value = "注册登录", tags = {"用户注册登录的相关接口"}) // API 分组
@@ -41,6 +46,17 @@ public class PassportController extends BaseController {
     private BaseUserController baseUserController;
     @Autowired
     private UserApplicationProperties userApplicationProperties;
+    @Autowired
+    private AuthService authService;
+    /**
+     * token 使用的头
+     */
+    private static final String AUTH = "Authorization";
+    private static final String REFRESH_TOKEN_HEADER = "refresh-token";
+    /**
+     * 存放用户的头
+     */
+    private static final String USERNAME = "mrcode-username";
 
     @ApiOperation(value = "用户名是否存在", notes = "判断用户名是否存在", httpMethod = "GET")
     @GetMapping("/usernameIsExist")
@@ -173,6 +189,15 @@ public class PassportController extends BaseController {
             return JSONResult.errorMsg("用户名或密码不正确");
         }
 
+        // 生成
+        AuthResponse token = authService.tokenize(user.getId());
+        if (!token.getCode().equals(AuthResponseCode.SUCCESS)) {
+            log.error("token error uid ={}", user.getId());
+            return JSONResult.errorMsg("token error");
+        }
+        // 将 token 信息添加到 响应的 header 中
+        addAuth2Header(response, token.getAccount());
+
         // 脱敏信息
         // setNullProperty(user);
         UsersVO usersVO = baseUserController.convertVo(user);
@@ -183,7 +208,27 @@ public class PassportController extends BaseController {
         // 生成用户 token 存入 redis 会话
         // 同步购物车数据
         synchShopcartData(user.getId(), request, response);
+
+
         return JSONResult.ok(user);
+    }
+
+    /**
+     * 将 token 信息添加到响应的 header 中，前端处理登录流程的地方，就要额外对照换个 header 进行处理，
+     * 并按规范添加到 请求头中，在通过网关鉴权的时候才会通过
+     *
+     * @param response
+     * @param token
+     */
+    private void addAuth2Header(HttpServletResponse response, Account token) {
+        response.addHeader(AUTH, token.getToken());
+        response.addHeader(REFRESH_TOKEN_HEADER, token.getRefreshToken());
+        response.addHeader(USERNAME, token.getUserId());
+
+        // 告诉前端 token 过期的时间，在过期前如果检测到用户当前还有操作的话，就刷新 token
+        Calendar expTime = Calendar.getInstance();
+        expTime.add(Calendar.DAY_OF_MONTH, 1);
+        response.addHeader("token-exp-time", expTime.getTimeInMillis() + "");
     }
 
     /**
@@ -285,6 +330,16 @@ public class PassportController extends BaseController {
     public JSONResult logout(@RequestParam String userId,
                              HttpServletRequest request,
                              HttpServletResponse response) throws Exception {
+        Account account = Account.builder()
+                .token(request.getHeader(AUTH))
+                .userId(userId)
+                .refreshToken(request.getHeader(REFRESH_TOKEN_HEADER))
+                .build();
+        AuthResponse resp = authService.delete(account);
+        if (!resp.getCode().equals(AuthResponseCode.SUCCESS)) {
+            return JSONResult.errorMsg("token error");
+        }
+
         // 这里暂时没有使用到 session 相关信息，不用清理，同样后续还会清空购物车
         // 但是需要清空 cookie 里面的信息
         CookieUtils.deleteCookie(request, response, "user");
@@ -293,6 +348,7 @@ public class PassportController extends BaseController {
         redisOperator.del(REDIS_USER_TOKEN + ":" + userId);
         // 清理 cookie 中的购物车，但是 redis 中不要清理，相当于购物车数据已经保存在服务端了
         CookieUtils.deleteCookie(request, response, BaseController.FOODIE_SHOPCART);
+
         return JSONResult.ok();
     }
 }
