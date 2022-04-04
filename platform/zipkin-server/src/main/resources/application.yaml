@@ -1,0 +1,22 @@
+server:
+  port: 20005
+
+eureka:
+  client:
+    # 服务注册中心地址
+    serviceUrl:
+      defaultZone: http://localhost:20000/eureka/
+
+spring:
+  application:
+    name: zipkin-server
+  main:
+    # 引入了 zipkin 的两个依赖，他们会有类冲突，这里允许重写 bean 定义，
+    allow-bean-definition-overriding: true
+
+# 解决一些启动时的错误日志
+management:
+  metrics:
+    web:
+      server:
+        auto-time-requests: false
