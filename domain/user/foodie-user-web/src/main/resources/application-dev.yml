@@ -15,6 +15,27 @@ spring:
     database: 1
     host: 127.0.0.1
     port: 6379
+  # 指定 MQ 源
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+  zipkin:
+    # 启用服务发现
+    discovery-client-enabled: true
+    base-url: http://ZIPKIN-SERVER/
+    # 启用通过服务发现定位主机名
+    locator:
+      discovery:
+        enabled: true
+    sender:
+      # 指定发送数据使用 http
+      # ZipkinSenderProperties.SenderType 定义可以使用 RABBIT、KAFKA、WEB
+      type: WEB
+  sleuth:
+    sampler:
+      probability: 1
 
 mybatis:
   configuration:

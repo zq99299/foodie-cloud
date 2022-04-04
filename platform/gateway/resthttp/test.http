@@ -12,3 +12,7 @@ Content-Type: application/json
 
 ### 用户地址获取
 POST http://localhost:20004/address/list?userId=220306FA5FHXMA80
+Content-Type: application/json
+mrcode-username: 220306FA5FHXMA80
+Authorization: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtcmNvZGUiLCJleHAiOjE2NDkwODE5ODksImlhdCI6MTY0OTA4MTM4OSwidXNlcm5hbWUiOiIyMjAzMDZGQTVGSFhNQTgwIn0.CzwcfHKvM0L810y4VGUMqT8-PJ9ZnG__gSAIAaG3LWg
+

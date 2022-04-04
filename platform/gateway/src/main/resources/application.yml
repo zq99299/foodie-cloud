@@ -41,6 +41,18 @@ spring:
     port: 6379
     database: 0
 
+  zipkin:
+    # 启用服务发现
+    discovery-client-enabled: true
+    base-url: http://ZIPKIN-SERVER/
+    # 启用通过服务发现定位主机名
+    locator:
+      discovery:
+        enabled: true
+  sleuth:
+    sampler:
+      probability: 1
+
 management:
   endpoints:
     web:
