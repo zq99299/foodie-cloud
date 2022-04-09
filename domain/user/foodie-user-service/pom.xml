@@ -30,6 +30,18 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
         </dependency>
+
+        <!-- 引入 foodie-auth-api -->
+        <dependency>
+            <groupId>cn.mrcode</groupId>
+            <artifactId>foodie-auth-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- stream rabbit -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rabbit</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

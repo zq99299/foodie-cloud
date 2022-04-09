@@ -36,6 +36,22 @@ spring:
     multipart:
       max-file-size: 512000     # 文件上传大小限制为 500kb
       max-request-size: 512000  # 请求大小限制为 500kb
+  # rabbit mq 配置
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+  cloud:
+    stream:
+      bindings:
+        force-logout-consumer:
+          destination: force-logout-topic
+          group: force-logout-group
+          consumer:
+            maxAttempts: 2
+        force-logout-producer:
+          destination: force-logout-topic
 
 ############################################################
 #

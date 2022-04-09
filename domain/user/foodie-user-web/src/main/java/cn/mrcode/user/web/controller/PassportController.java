@@ -11,6 +11,7 @@ import cn.mrcode.user.pojo.Users;
 import cn.mrcode.user.pojo.bo.ShopcartBO;
 import cn.mrcode.user.pojo.bo.UserBO;
 import cn.mrcode.user.pojo.vo.UsersVO;
+import cn.mrcode.user.stream.ForceLogoutTopic;
 import cn.mrcode.user.web.UserApplicationProperties;
 import cn.mrcode.utils.CookieUtils;
 import cn.mrcode.utils.JsonUtils;
@@ -25,6 +26,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -349,6 +351,22 @@ public class PassportController extends BaseController {
         // 清理 cookie 中的购物车，但是 redis 中不要清理，相当于购物车数据已经保存在服务端了
         CookieUtils.deleteCookie(request, response, BaseController.FOODIE_SHOPCART);
 
+        return JSONResult.ok();
+    }
+
+    @Autowired
+    private ForceLogoutTopic forceLogoutTopic;
+
+    // 这里还有一个安全问题需要注意：不要在网关层暴露该接口，否则任何人都可以访问
+    @ApiOperation(value = "用户强制退出登录")
+    @PostMapping("/forceLogout")
+    public JSONResult logout(@RequestParam String userIds) {
+        String[] uids = userIds.split(",");
+        for (String uid : uids) {
+            log.info("发送强制退出消息 uid={}", uid);
+            forceLogoutTopic.output()
+                    .send(MessageBuilder.withPayload(uid).build());
+        }
         return JSONResult.ok();
     }
 }

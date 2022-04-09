@@ -46,13 +46,6 @@
             <artifactId>spring-cloud-starter-bus-amqp</artifactId>
         </dependency>
 
-        <!-- 引入 foodie-auth-api -->
-        <dependency>
-            <groupId>cn.mrcode</groupId>
-            <artifactId>foodie-auth-api</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
         <!-- sleuth -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
