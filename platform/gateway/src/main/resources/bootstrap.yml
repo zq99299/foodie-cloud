@@ -2,3 +2,8 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:20000/eureka
+
+# 这个项目不知道为什么会抽风，外部传入的参数好像没有起作用，只能手动在这里指定环境了
+spring:
+  profiles:
+    active: prod

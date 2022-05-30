@@ -1,0 +1,8 @@
+eureka:
+  client:
+    # 服务注册中心地址
+    serviceUrl:
+      defaultZone: http://192.168.56.109:20000/eureka/
+  instance:
+    # 注册实例的时候，使用 IP 地址，而不是 hostname
+    prefer-ip-address: true

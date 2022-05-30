@@ -1,0 +1,15 @@
+spring:
+  redis:
+    database: 0
+    # 由于默认网络无法使用容器名访问到 redis，所以需要指定宿主机 ip
+    host: 192.168.56.109
+    port: 6379
+
+eureka:
+  client:
+    # 服务注册中心地址
+    service-url:
+      defaultZone: http://192.168.56.109:20000/eureka
+  instance:
+    # 注册实例的时候，使用 IP 地址，而不是 hostname
+    prefer-ip-address: true

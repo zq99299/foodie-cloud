@@ -9,7 +9,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <packaging>jar</packaging>
     <artifactId>foodie-auth-service</artifactId>
 
     <dependencies>
@@ -64,5 +64,26 @@
             <version>5.2</version>
         </dependency>
     </dependencies>
-
+    <build>
+        <plugins>
+            <plugin>
+                <!-- 命令行启动配置  -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.1.18.RELEASE</version>
+                <configuration>
+                    <!-- 启动类 -->
+                    <mainClass>cn.mrcode.auth.service.AuthServiceApplication</mainClass>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!-- 从新打包，将清单中的启动类替换到上面配置的 mainClass -->
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

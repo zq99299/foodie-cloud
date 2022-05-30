@@ -1,0 +1,8 @@
+server:
+  port: 20004
+
+spring:
+  redis:
+    host: 192.168.56.109
+    port: 6379
+    database: 0
