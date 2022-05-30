@@ -1,0 +1,5 @@
+eureka:
+  instance:
+    # 这里写上容器所在的虚拟机内网 IP
+    # 在开发模式下写的 localhost
+    hostname: 192.168.56.109

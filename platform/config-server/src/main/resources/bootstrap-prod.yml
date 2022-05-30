@@ -1,0 +1,20 @@
+eureka:
+  client:
+    service-url:
+      # 使用容器名去访问注册中心
+      defaultZone: http://192.168.56.109:20000/eureka
+  # 这里实例 ID 上报容器名称和端口号，使用容器名:端口号访问 微服务
+  instance:
+    # 默认的话就是使用 主机名称（host name）
+    # 如果使用自定义网络的话，就要写容器名称，使用勇气名称访问到该容器
+    # instance-id: config-server
+
+
+     # 如果你使用 IP 地址而不是使用容器名的话，就使用下面的配置
+     # 使用 IP 地址注册到服务注册中心
+     # 这里控制的是注解中心的 Status 一栏下面显示的名称
+     # 默认情况下会显示 7ed850f5e6ab:config-server:20003 ，最前面的是主机名称（主机名就是容器 ID）
+     # 即使使用了 hostname 配置，这里也会不会使用这设置的 hostname 名称
+     instance-id: ${eureka.instance.ip-address}:${server.port}
+     ip-address: 192.168.56.109
+     prefer-ip-address: true
